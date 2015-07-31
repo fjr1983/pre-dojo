@@ -8,47 +8,59 @@ import java.util.Set;
 import br.com.amil.game.util.CarregarLog;
 
 public class Main {
-
 	
+	private static final String PATH_ARQUIVO = "/home/felipe/game.log";
+
 	public static void main(String[] args) {
 		int nrMortosTotal = 0;
-		Map<String, Integer> mapQtdeMortesPorJogador = new HashMap<String, Integer>();
-		CarregarLog l = new CarregarLog();
-		Map<String, List<Map<String, List<String>>>> mapaPartidas = l.gerarMapaPartidas("/home/felipe/game.log");
-		List<Map<String, List<String>>> listaJogadores = mapaPartidas.get("11348965");
-		for (Map<String, List<String>> map : listaJogadores) {
-			Set<String> keySet = map.keySet();
-			for (String key : keySet) {
-				Integer mortes = null;
-				List<String> listaMortos = map.get(key);
-				nrMortosTotal =+ listaMortos.size();
-				for (String nome : listaMortos) {
-					if(mapQtdeMortesPorJogador.containsKey(nome)){
-						mortes = mapQtdeMortesPorJogador.get(nome);
-						mortes = mortes+1;
-						mapQtdeMortesPorJogador.put(nome, mortes);						
-					}else{
-						mapQtdeMortesPorJogador.put(nome, 1);
+		int mortes = 1;
+		int assassinatos = 1;
+		Map<String, Integer> mapQtdeMortesSofridasPorJogador = new HashMap<String, Integer>();
+		Map<String, Integer> mapQtdeAssassinatosCometidosPorJogador = new HashMap<String, Integer>();
+
+		Map<String, List<Map<String, List<String>>>> mapaPartidas = CarregarLog.gerarMapaPartidas(PATH_ARQUIVO);
+		Set<String> keySetPartidas = mapaPartidas.keySet();
+		for (String nrPartida : keySetPartidas) {
+		
+			List<Map<String, List<String>>> listaJogadores = mapaPartidas.get(nrPartida);
+			for (Map<String, List<String>> map : listaJogadores) {
+				Set<String> keySet = map.keySet();
+				for (String nomeJogador : keySet) {
+
+					List<String> listaMortos = map.get(nomeJogador);
+					nrMortosTotal =+ listaMortos.size();
+					for (String nome : listaMortos) {
+						if(nomeJogador.equals("<WORLD>")){
+							if(mapQtdeAssassinatosCometidosPorJogador.containsKey(nome)) {
+								assassinatos = mapQtdeAssassinatosCometidosPorJogador.get(nome);
+								assassinatos = assassinatos+1;
+								mapQtdeAssassinatosCometidosPorJogador.put(nome, assassinatos);						
+							}else{
+								mapQtdeAssassinatosCometidosPorJogador.put(nome, assassinatos);
+							}
+						}else{
+							if(mapQtdeMortesSofridasPorJogador.containsKey(nome)){
+								mortes = mapQtdeMortesSofridasPorJogador.get(nome);
+								mortes = mortes+1;
+								mapQtdeMortesSofridasPorJogador.put(nome, mortes);						
+							}else{
+								mapQtdeMortesSofridasPorJogador.put(nome, mortes);
+							}
+						}
+						nrMortosTotal++;
 					}
-					nrMortosTotal++;
-					System.out.println("qtde nick "+mortes);
-					System.out.println("nome morto "+nome);
-				}
-				
+				}					
 			}
-			System.out.println("nrMortosTotal"+nrMortosTotal);
+		}
+		System.out.println("RANKING: ");
+		System.out.println("Número de Mortos Total: "+nrMortosTotal);
+
+		for(String nomeJogadorMorto: mapQtdeMortesSofridasPorJogador.keySet()){
+			System.out.println(nomeJogadorMorto +": Morreu:   "+mapQtdeMortesSofridasPorJogador.get(nomeJogadorMorto)+"     vez(es).");
 		}
 		
-		System.out.println("nrMOrtes   "+nrMortosTotal);
-		System.out.println("Nick mapa   --  "+mapQtdeMortesPorJogador.get("Nick"));
-		
-		for (Map<String, List<String>> map : listaJogadores) {
-			List<String> list = map.get("Roman");
-			if(list!=null){
-				for (String string : list) {
-					System.out.println(string);
-				}
-			}
+		for(String nomeJogadorAssassinato: mapQtdeAssassinatosCometidosPorJogador.keySet()){
+			System.out.println(nomeJogadorAssassinato +": Matou:   "+mapQtdeMortesSofridasPorJogador.get(nomeJogadorAssassinato)+"     vez(es).");
 		}
 
 	}
