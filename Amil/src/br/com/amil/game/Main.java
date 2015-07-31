@@ -1,5 +1,6 @@
 package br.com.amil.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ public class Main {
 		int nrMortosTotal = 0;
 		int mortes = 1;
 		int assassinatos = 1;
+		Map<String, List<Map<String, Integer> >> mapResultadoPartida = new HashMap<String, List<Map<String, Integer> >>();
+		List<Map<String, Integer> > listaResultadoPartida = new ArrayList<Map<String,Integer>>();
 		Map<String, Integer> mapQtdeMortesSofridasPorJogador = new HashMap<String, Integer>();
 		Map<String, Integer> mapQtdeAssassinatosCometidosPorJogador = new HashMap<String, Integer>();
 
@@ -34,34 +37,38 @@ public class Main {
 							if(mapQtdeAssassinatosCometidosPorJogador.containsKey(nome)) {
 								assassinatos = mapQtdeAssassinatosCometidosPorJogador.get(nome);
 								assassinatos = assassinatos+1;
-								mapQtdeAssassinatosCometidosPorJogador.put(nome, assassinatos);						
+								mapQtdeAssassinatosCometidosPorJogador.put(nome+" Matou :  ", assassinatos);						
 							}else{
-								mapQtdeAssassinatosCometidosPorJogador.put(nome, assassinatos);
+								mapQtdeAssassinatosCometidosPorJogador.put(nome+" Matou :  ", assassinatos);
 							}
+							listaResultadoPartida.add(mapQtdeAssassinatosCometidosPorJogador);
 						}else{
 							if(mapQtdeMortesSofridasPorJogador.containsKey(nome)){
 								mortes = mapQtdeMortesSofridasPorJogador.get(nome);
 								mortes = mortes+1;
-								mapQtdeMortesSofridasPorJogador.put(nome, mortes);						
+								mapQtdeMortesSofridasPorJogador.put(nome+ "  Morreu :  ", mortes);						
 							}else{
-								mapQtdeMortesSofridasPorJogador.put(nome, mortes);
+								mapQtdeMortesSofridasPorJogador.put(nome+ "  Morreu :  ", mortes);
 							}
+							listaResultadoPartida.add(mapQtdeMortesSofridasPorJogador);
 						}
 						nrMortosTotal++;
 					}
-				}					
+				}
 			}
-		}
-		System.out.println("RANKING: ");
-		System.out.println("Número de Mortos Total: "+nrMortosTotal);
+			mapResultadoPartida.put(nrPartida, listaResultadoPartida);
 
-		for(String nomeJogadorMorto: mapQtdeMortesSofridasPorJogador.keySet()){
-			System.out.println(nomeJogadorMorto +": Morreu:   "+mapQtdeMortesSofridasPorJogador.get(nomeJogadorMorto)+"     vez(es).");
 		}
 		
-		for(String nomeJogadorAssassinato: mapQtdeAssassinatosCometidosPorJogador.keySet()){
-			System.out.println(nomeJogadorAssassinato +": Matou:   "+mapQtdeMortesSofridasPorJogador.get(nomeJogadorAssassinato)+"     vez(es).");
-		}
+		for (String nrPartida : mapResultadoPartida.keySet()) {
+			System.out.println("RANKING: Partida:   " + nrPartida);
 
+			for (Map<String, Integer> mapResultadoPorJogador : mapResultadoPartida.get(nrPartida)) {
+					
+				for(String nome: mapResultadoPorJogador.keySet()) {
+					System.out.println(nome +"  "+mapResultadoPorJogador.get(nome)+"     vez(es).");
+				}
+			}
+		}
 	}
 }
