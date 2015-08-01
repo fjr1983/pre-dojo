@@ -42,32 +42,43 @@ public class Game {
 				listaResultadoPartida = new ArrayList<Map<String,Integer>>();
 
 				Set<String> keySet = map.keySet();
-				for (String nomeJogador : keySet) {
-					listaMortos = map.get(nomeJogador);
+				for (String nomeJogadorMatador : keySet) {
+					listaMortos = map.get(nomeJogadorMatador);
 
-					for (String nome : listaMortos) {
+					for (String nomeJogadorMorto : listaMortos) {
 
-						if(nomeJogador.equals("<WORLD>")){
-							if(mapQtdeAssassinatosCometidosPorJogador.containsKey(nome)) {
-								assassinatos = mapQtdeAssassinatosCometidosPorJogador.get(nome);
+						if(nomeJogadorMatador.equals("<WORLD>")){
+							if(mapQtdeAssassinatosCometidosPorJogador.containsKey(nomeJogadorMorto+" Matou :  ")) {
+								assassinatos = mapQtdeAssassinatosCometidosPorJogador.get(nomeJogadorMorto+" Matou :  ");
 								assassinatos = assassinatos+1;
-								mapQtdeAssassinatosCometidosPorJogador.put(nome+" Matou :  ", assassinatos);						
+								mapQtdeAssassinatosCometidosPorJogador.put(nomeJogadorMorto+" Matou :  ", assassinatos);						
 							}else{
-								mapQtdeAssassinatosCometidosPorJogador.put(nome+" Matou :  ", assassinatos);
+								mapQtdeAssassinatosCometidosPorJogador.put(nomeJogadorMorto+" Matou :  ", assassinatos);
 							}
-							listaResultadoPartida.add(mapQtdeAssassinatosCometidosPorJogador);
 						}else{
-							if(mapQtdeMortesSofridasPorJogador.containsKey(nome)){
-								mortes = mapQtdeMortesSofridasPorJogador.get(nome);
-								mortes = mortes+1;
-								mapQtdeMortesSofridasPorJogador.put(nome+ "  Morreu :  ", mortes);						
+							if(mapQtdeAssassinatosCometidosPorJogador.containsKey(nomeJogadorMatador+" Matou :  ")) {
+								assassinatos = mapQtdeAssassinatosCometidosPorJogador.get(nomeJogadorMatador+" Matou :  ");
+								assassinatos = assassinatos+1;
+								mapQtdeAssassinatosCometidosPorJogador.put(nomeJogadorMatador+" Matou :  ", assassinatos);						
 							}else{
-								mapQtdeMortesSofridasPorJogador.put(nome+ "  Morreu :  ", mortes);
+								mapQtdeAssassinatosCometidosPorJogador.put(nomeJogadorMatador+" Matou :  ", assassinatos);
 							}
-							listaResultadoPartida.add(mapQtdeMortesSofridasPorJogador);
+							if(mapQtdeMortesSofridasPorJogador.containsKey(nomeJogadorMorto+" Morreu :  ")){
+								mortes = mapQtdeMortesSofridasPorJogador.get(nomeJogadorMorto+" Morreu :  ");
+								mortes = mortes+1;
+								mapQtdeMortesSofridasPorJogador.put(nomeJogadorMorto+ " Morreu :  ", mortes);						
+							}else{
+								mapQtdeMortesSofridasPorJogador.put(nomeJogadorMorto+ " Morreu :  ", mortes);
+
+							}
 						}
+
 					}
+
 				}
+				listaResultadoPartida.add(mapQtdeAssassinatosCometidosPorJogador);
+				listaResultadoPartida.add(mapQtdeMortesSofridasPorJogador);
+
 			}
 			mapResultadoPartida.put(nrPartida, listaResultadoPartida);
 		}
