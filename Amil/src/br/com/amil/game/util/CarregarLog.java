@@ -19,12 +19,13 @@ public class CarregarLog {
 
 	public static Map<String, List<Map<String, List<String> >>> gerarMapaPartidas (String path)  { 
 		Map<String, List<Map<String, List<String> >>> mapaPartidas = new HashMap<String, List<Map<String, List<String>>>>();
-		Map<String, List<String>> mapaJogadores = new HashMap<String, List<String>>();
+		Map<String, List<String>> mapaJogadores = null;
 
 		String nrPartida = "";
 		Integer beginIndex = 21;
 		Integer beginIndexArma = null;
 		List<String> listaDeMortos = null;
+		List<Map<String, List<String> >> listaJogadores = null;
 
 		try { 
 			FileReader arq = new FileReader(path); 
@@ -35,6 +36,7 @@ public class CarregarLog {
 					int newMatchIndex = linha.indexOf(NEW_MATCH)+NEW_MATCH.length();
 					int hasStartedIndex = linha.indexOf(HAS_STARTED);
 					nrPartida = linha.substring(newMatchIndex+1, hasStartedIndex-1);
+					mapaJogadores = new HashMap<String, List<String>>();
 				}else if(linha.matches(SEARCH_PATTERN+KILLED+SEARCH_PATTERN)){
 					int beginKilledIndex = linha.indexOf(KILLED);
 					int endKilledIndex = linha.indexOf(KILLED)+KILLED.length();
@@ -54,8 +56,7 @@ public class CarregarLog {
 						listaDeMortos.add(jogadorMorto);
 						mapaJogadores.put(jogadorMatador, listaDeMortos);
 					}
-					List<Map<String, List<String> >> listaJogadores = null;
-					if(mapaPartidas.containsKey(nrPartida)){
+					if(mapaPartidas.containsKey(nrPartida) ){
 						listaJogadores = mapaPartidas.get(nrPartida);
 					}else{
 						listaJogadores = new ArrayList<Map<String, List<String>>>();

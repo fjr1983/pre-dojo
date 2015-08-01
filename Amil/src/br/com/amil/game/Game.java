@@ -22,14 +22,17 @@ public class Game {
 		List<String> listaMortos = null;
 		Map<String, List<Map<String, List<String>>>> mapaPartidas = CarregarLog.gerarMapaPartidas(PATH_ARQUIVO);
 		Set<String> keySetPartidas = mapaPartidas.keySet();
+
+		mapResultadoPartida = new HashMap<String, List<Map<String, Integer> >>();
+
 		for (String nrPartida : keySetPartidas) {
-			mapResultadoPartida = new HashMap<String, List<Map<String, Integer> >>();
 			
 			List<Map<String, List<String>>> listaJogadores = mapaPartidas.get(nrPartida);
 			for (Map<String, List<String>> map : listaJogadores) {
-				listaResultadoPartida = new ArrayList<Map<String,Integer>>();
+
 				mapQtdeMortesSofridasPorJogador = new HashMap<String, Integer>();
 				mapQtdeAssassinatosCometidosPorJogador = new HashMap<String, Integer>();
+				listaResultadoPartida = new ArrayList<Map<String,Integer>>();
 
 				Set<String> keySet = map.keySet();
 				for (String nomeJogador : keySet) {
@@ -60,7 +63,6 @@ public class Game {
 				}
 			}
 			mapResultadoPartida.put(nrPartida, listaResultadoPartida);
-
 		}
 		
 		exibirResultado(mapResultadoPartida);
