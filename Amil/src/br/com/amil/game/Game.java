@@ -13,19 +13,26 @@ public class Game {
 	private static final String PATH_ARQUIVO = "/home/felipe/game.log";
 
 	public static void main(String[] args) {
+
+		Map<String, List<Map<String, List<String>>>> mapaPartidas = CarregarLog.gerarMapaPartidas(PATH_ARQUIVO);
+
+		Map<String, List<Map<String, Integer>>> mapResultadoPartida = prepararMapaResultados(mapaPartidas);
+		
+		exibirResultado(mapResultadoPartida);
+	}
+
+	private static Map<String, List<Map<String, Integer>>> prepararMapaResultados(
+			Map<String, List<Map<String, List<String>>>> mapaPartidas) {
 		int mortes = 1;
 		int assassinatos = 1;
-		Map<String, List<Map<String, Integer> >> mapResultadoPartida = null;
 		List<Map<String, Integer> > listaResultadoPartida = null;
 		Map<String, Integer> mapQtdeMortesSofridasPorJogador = null;
 		Map<String, Integer> mapQtdeAssassinatosCometidosPorJogador = null;
 		List<String> listaMortos = null;
-		Map<String, List<Map<String, List<String>>>> mapaPartidas = CarregarLog.gerarMapaPartidas(PATH_ARQUIVO);
-		Set<String> keySetPartidas = mapaPartidas.keySet();
+		Map<String, List<Map<String, Integer> >> mapResultadoPartida  = new HashMap<String, List<Map<String, Integer> >>();
 
-		mapResultadoPartida = new HashMap<String, List<Map<String, Integer> >>();
 
-		for (String nrPartida : keySetPartidas) {
+		for (String nrPartida : mapaPartidas.keySet()) {
 			
 			List<Map<String, List<String>>> listaJogadores = mapaPartidas.get(nrPartida);
 			for (Map<String, List<String>> map : listaJogadores) {
@@ -64,8 +71,7 @@ public class Game {
 			}
 			mapResultadoPartida.put(nrPartida, listaResultadoPartida);
 		}
-		
-		exibirResultado(mapResultadoPartida);
+		return mapResultadoPartida;
 	}
 
 	private static void exibirResultado(
