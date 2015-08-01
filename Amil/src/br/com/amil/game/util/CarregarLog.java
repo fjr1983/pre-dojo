@@ -56,9 +56,7 @@ public class CarregarLog {
 						listaDeMortos.add(jogadorMorto);
 						mapaJogadores.put(jogadorMatador, listaDeMortos);
 					}
-					if(mapaPartidas.containsKey(nrPartida) ){
-						listaJogadores = mapaPartidas.get(nrPartida);
-					}else{
+					if(!mapaPartidas.containsKey(nrPartida) ){
 						listaJogadores = new ArrayList<Map<String, List<String>>>();
 						listaJogadores.add(mapaJogadores);
 						mapaPartidas.put(nrPartida, listaJogadores);
